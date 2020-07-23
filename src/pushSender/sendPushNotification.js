@@ -33,5 +33,5 @@ function fakeSender(options) {
 }
 
 module.exports = {
-    sendPushNotification: fakeSender
+    sendPushNotification: sendPushNotification
 };
