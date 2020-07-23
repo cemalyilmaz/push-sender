@@ -1,11 +1,11 @@
 {
-  "name": "PushSender",
-  "version": "1.0.0",
-  "description": "",
+  "name": "push-sender",
+  "version": "0.0.1",
+  "description": "Helper for developers, easily test push notifications.",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "mocha  'src/**/*.test.js' --recursive"
+    "test": "mocha 'src/**/*.test.js' --recursive"
   },
   "dependencies": {
     "chalk": "^4.1.0",
@@ -22,7 +22,7 @@
     "chai": "*",
     "mocha": "*"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": ["push notification", "vorpal", "android"],
+  "author": "Cemal YILMAZ",
+  "license": "MIT"
 }
