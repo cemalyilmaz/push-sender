@@ -1,0 +1,10 @@
+{
+  "data": {
+    "command": "launch_browser",
+    "title": "$TEXT$",
+    "message": "$TEXT$",
+    "url": "http://www.google.com",
+    "isSilent": "0",
+    "isRich": "1"
+  }
+}

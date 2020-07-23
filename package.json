@@ -1,0 +1,28 @@
+{
+  "name": "PushSender",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "mocha  'src/**/*.test.js' --recursive"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "cli-table": "^0.3.1",
+    "get-value": "^3.0.1",
+    "glob": "^7.1.6",
+    "node-gcm": "^1.0.2",
+    "node-localstorage": "^2.1.5",
+    "node-pushnotifications": "^1.2.0",
+    "set-value": "^3.0.2",
+    "vorpal": "https://github.com/alansouzati/vorpal/tarball/EXIT_ON_PARSE"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
