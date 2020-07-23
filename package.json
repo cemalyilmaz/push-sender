@@ -22,7 +22,11 @@
     "chai": "*",
     "mocha": "*"
   },
-  "keywords": ["push notification", "vorpal", "android"],
+  "keywords": [
+    "push notification",
+    "vorpal",
+    "android"
+  ],
   "author": "Cemal YILMAZ",
   "license": "MIT"
 }

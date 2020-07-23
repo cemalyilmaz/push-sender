@@ -1,7 +1,7 @@
 # push-sender
 Send push notification via interactive command line.
 
-##Commands
+## Commands
 
 ### add project
 create a new project with a name and ApiKey
@@ -9,6 +9,8 @@ create a new project with a name and ApiKey
 remove project (you can autocomplete with TAB)
 ### select (use) project
 select the project (the ApiKey will be used)
+### projects
+list projects
 
 ### add device
 create a new device with a name and token
@@ -16,6 +18,8 @@ create a new device with a name and token
 remove device (you can autocomplete with TAB)
 ### select (use) devices
 select devices to send push notification
+### devices 
+list devices
 
 ### send: 
 send a message with last settings (if not selected a project/device/template/message before ask for selections)
@@ -29,6 +33,14 @@ Send the last message update device selection, template file and template conten
 Send the last message update project, device selection, template file and template contents
 
 ### build message
+build message with prompt if any template property given.
+
+### clear
+reset all selections (project/devices/template/message)
+
+## Templates
+./input folder has templates to be send as push notification.
+If you provide any node with value of *$TEXT$* or *$NUMBER$* build message command step will ask those parameters.
 
 
 ### TODO:
