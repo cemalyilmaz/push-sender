@@ -35,6 +35,7 @@ function sendPushNotification(pushSender) {
         pushSender
             .vorpal
             .command('send [type]')
+            .option('-d, --dry', 'do not send message, only log.')
             .alias('s')
             .description("send: send last message\r\n" +
                 "send 1: Send the last message update only template contents\r\n" +
@@ -43,73 +44,74 @@ function sendPushNotification(pushSender) {
                 "send 4: Send the last message update project, device selection, template file and template contents\r\n" +
                 ""
             )
-
             .action(function (args, cb) {
+                let dry = args.options.dry
                 let type = parseInt(args.type) || 0;
                 // 1=> From message
                 // 2=> From message, template
                 // 3=> From message, template, device
                 // 4=> From message, template, device, project
-
-                this.log('type: ' + type);
-
-                Promise.resolve()
-                    .then(() => {
-                        if (pushSender.project === undefined || type >= 4) {
-                            return project.call(this)
-                        }
-                        return pushSender.project;
-                    })
-                    .then(project => {
-                        pushSender.updateProject(project)
-
-                        if (pushSender.devices === undefined || type >= 3) {
-                            return device.call(this);
-                        }
-                        return pushSender.devices;
-
-                    })
-                    .then(devices => {
-                        pushSender.updateDevices(devices);
-                        if (pushSender.template === undefined || type >= 2) {
-                            return template.call(this);
-                        }
-                        return pushSender.template;
-
-                    })
-                    .then(templateFile => {
-                        pushSender.updateTemplate(templateFile);
-
-                        if (pushSender.message === undefined || type >= 1) {
-                            let data = fs.readFileSync('./input/' + templateFile)
-                            let templateJSON = JSON.parse(data);
-                            console.log('template json' + JSON.stringify(templateJSON));
-                            return {templateJSON: templateJSON};
-                        }
-
-                        return {message: pushSender.message};
-                    })
-                    .then(({message, templateJSON}) => {
-                        if (pushSender.message === undefined || type >= 1) {
-                            return templatePrompt.call(this, templateJSON);
-                        }
-                        return message;
-                    })
-                    .then(message => {
-                        this.log('THE MESSAGE:' + JSON.stringify(message));
-                        pushSender.updateMessage(message);
-
-                        sendPush({
-                            project: pushSender.project,
-                            devices: pushSender.devices,
-                            message: pushSender.message,
-                        });
-                        cb(undefined);
-                    })
+                sendMessage.call(this, pushSender, type, dry, cb);
             })
     } catch (e) {
         console.log("Error occured: ", e);
     }
+}
+
+function sendMessage(pushSender, type, dry, cb) {
+    Promise.resolve()
+        .then(() => {
+            if (pushSender.project === undefined || type >= 4) {
+                return project.call(this)
+            }
+            return pushSender.project;
+        })
+        .then(project => {
+            pushSender.updateProject(project)
+
+            if (pushSender.devices === undefined || type >= 3) {
+                return device.call(this);
+            }
+            return pushSender.devices;
+
+        })
+        .then(devices => {
+            pushSender.updateDevices(devices);
+            if (pushSender.template === undefined || type >= 2) {
+                return template.call(this);
+            }
+            return pushSender.template;
+
+        })
+        .then(templateFile => {
+            pushSender.updateTemplate(templateFile);
+
+            if (pushSender.message === undefined || type >= 1) {
+                let data = fs.readFileSync('./input/' + templateFile)
+                let templateJSON = JSON.parse(data);
+                console.log('template json' + JSON.stringify(templateJSON));
+                return {templateJSON: templateJSON};
+            }
+
+            return {message: pushSender.message};
+        })
+        .then(({message, templateJSON}) => {
+            if (pushSender.message === undefined || type >= 1) {
+                return templatePrompt.call(this, templateJSON);
+            }
+            return message;
+        })
+        .then(message => {
+            this.log('THE MESSAGE:' + JSON.stringify(message));
+            pushSender.updateMessage(message);
+
+            sendPush({
+                project: pushSender.project,
+                devices: pushSender.devices,
+                message: pushSender.message,
+            }, dry);
+            cb(undefined);
+        })
 }
 
 function project() {
