@@ -7,8 +7,8 @@ const DeviceRepository = require('../device/DeviceRepository');
 const deviceRepository = new DeviceRepository({db});
 
 const Templates = require('../templates/templates');
-const setValue = require('set-value');
-const getValue = require('get-value');
+const {preparePrompt, replaceObject} = require('../prompt/PromptBuilder');
+
 const fs = require('fs');
 
 const sendPush = require('../pushSender/sendPushNotification').sendPushNotification;
@@ -113,7 +113,7 @@ function sendPushNotification(pushSender) {
 }
 
 function project() {
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise((resolve) => {
         let prompt = {
             type: 'list',
             name: 'project',
@@ -139,7 +139,7 @@ function project() {
 }
 
 function device() {
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise((resolve) => {
 
         let prompt = {
             type: 'checkbox',
@@ -166,7 +166,7 @@ function device() {
 }
 
 function template() {
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise((resolve) => {
 
         let templates = new Templates();
         templates.list()
@@ -182,28 +182,13 @@ function template() {
 }
 
 function templatePrompt(jsonTemplate) {
-    let promise = new Promise((resolve, reject) => {
-        let templates = new Templates();
-
-        this.prompt(templates.preparePrompt(null, jsonTemplate), function (result) {
+    let promise = new Promise((resolve) => {
+        this.prompt(preparePrompt(null, jsonTemplate), function (result) {
             let message = replaceObject(jsonTemplate, result)
             resolve(message);
         });
     });
     return promise;
-}
-
-function replaceObject(source, result) {
-    const obj = Object.assign({}, source);
-
-    for (const key in result) {
-        if (result.hasOwnProperty(key)) {
-            let value = getValue(result, key)
-            setValue(obj, key, value)
-        }
-    }
-
-    return obj;
 }
 
 module.exports = {

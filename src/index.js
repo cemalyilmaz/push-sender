@@ -1,4 +1,3 @@
-
 // todo: add dry run for 'send' command
 // todo: add update project
 // todo: add update device

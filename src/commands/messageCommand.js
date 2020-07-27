@@ -1,6 +1,6 @@
 const Templates = require('../templates/templates');
-const setValue = require('set-value');
-const getValue = require('get-value');
+const {preparePrompt, replaceObject} = require('../prompt/PromptBuilder');
+
 const fs = require('fs');
 const chalk = require('chalk');
 
@@ -30,7 +30,7 @@ function messageCommand(pushSender) {
                     let data = fs.readFileSync('./input/' + result.template)
                     let template = JSON.parse(data);
 
-                    this.prompt(templates.preparePrompt(null, template), function (result) {
+                    this.prompt(preparePrompt(null, template), function (result) {
                         let message = replaceObject(template, result)
                         pushSender.updateMessage(message);
                         cb(undefined, message);
@@ -39,19 +39,6 @@ function messageCommand(pushSender) {
             })
         });
 }
-
-function replaceObject(source, result) {
-    const obj = Object.assign({}, source);
-
-    for (const key in result) {
-        if (result.hasOwnProperty(key)) {
-            let value = getValue(result, key)
-            setValue(obj, key, value)
-        }
-    }
-    return obj;
-}
-
 
 module.exports = {
     buildMessageCommand: messageCommand,

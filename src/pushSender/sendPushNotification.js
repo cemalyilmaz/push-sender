@@ -10,7 +10,6 @@ function sendPushNotification(options) {
     console.log(chalk.red('receivers: ' + receivers));
     let message = new gcm.Message(options.message);
 
-    console.debug('APIKEY: ' + apiKey);
     const sender = new gcm.Sender(apiKey);
 
     // Actually send the message
