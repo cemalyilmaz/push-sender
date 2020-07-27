@@ -21,7 +21,7 @@ select devices to send push notification
 ### devices 
 list devices
 
-### send: 
+### send [type] --dry: 
 send a message with last settings (if not selected a project/device/template/message before ask for selections)
 ### send 1: 
 Send the last message update only template contents
@@ -31,6 +31,8 @@ Send the last message update template file and template contents
 Send the last message update device selection, template file and template contents
 ### send 4: 
 Send the last message update project, device selection, template file and template contents
+### send [type] --dry:
+Same as send but do not actually send the message, only logs the options selected.
 
 ### build message
 build message with prompt if any template property given.

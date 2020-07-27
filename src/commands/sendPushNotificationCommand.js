@@ -42,6 +42,7 @@ function sendPushNotification(pushSender) {
                 "send 2: Send the last message update template file and template contents\r\n" +
                 "send 3: Send the last message update device selection, template file and template contents\r\n" +
                 "send 4: Send the last message update project, device selection, template file and template contents\r\n" +
+                "use --dry option to log the options on screen (but do not send). " +
                 ""
             )
             .action(function (args, cb) {
