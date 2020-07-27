@@ -5,6 +5,8 @@ Send push notification via interactive command line.
 
 ### add project
 create a new project with a name and ApiKey
+### edit project
+update project name and apiKey
 ### remove project
 remove project (you can autocomplete with TAB)
 ### select (use) project
@@ -14,6 +16,8 @@ list projects
 
 ### add device
 create a new device with a name and token
+### edit device
+update device name and token
 ### remove device
 remove device (you can autocomplete with TAB)
 ### select (use) devices

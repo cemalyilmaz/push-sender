@@ -33,6 +33,12 @@ class ProjectRepository {
         this.saveProjectsToFile(this.projects);
     }
 
+    updateProject(oldName, newName, apiKey) {
+        this.removeProjectNamed(oldName);
+        let projectModel = new ProjectModel({name: newName, apiKey});
+        this.addProject(projectModel);
+    }
+
     getProjects() {
         this.load();
         return this.projects || [];

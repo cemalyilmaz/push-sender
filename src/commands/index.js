@@ -19,11 +19,13 @@ function initCommands(pushSender) {
     sendPush.clearCommand(pushSender);
 
     project.addProjectCommand(pushSender);
+    project.editProjectCommand(pushSender);
     project.listProjectsCommand(pushSender);
     project.removeProjectCommand(pushSender);
     project.selectProjectCommand(pushSender);
 
     device.addDeviceCommand(pushSender);
+    device.editDeviceCommand(pushSender);
     device.listDevicesCommand(pushSender);
     device.removeDeviceCommand(pushSender);
     device.selectDeviceCommand(pushSender);

@@ -6,7 +6,6 @@ const ProjectModel = require('../project/ProjectModel');
 const chalk = require('chalk');
 
 function addProjectCommand(pushSender) {
-
     let prompt = [{
         type: 'input',
         name: 'name',
@@ -27,6 +26,30 @@ function addProjectCommand(pushSender) {
         });
 }
 
+function editProjectCommand(pushSender) {
+    pushSender.vorpal.command('edit project')
+        .action(function (args, cb) {
+            selectProject(this, projectModel => {
+                let prompt = [{
+                    type: 'input',
+                    name: 'name',
+                    default: projectModel.name,
+                    message: 'project name :'
+                }, {
+                    type: 'input',
+                    name: 'apiKey',
+                    default: projectModel.apiKey,
+                    message: 'apiKey :'
+                }];
+
+                this.prompt(prompt, ({name, apiKey}) => {
+                    repository.updateProject(projectModel.name, name, apiKey);
+                    cb(undefined, projectModel);
+                })
+            });
+        });
+}
+
 function listProjectsCommand(pushSender) {
     pushSender.vorpal
         .command('list projects')
@@ -39,33 +62,18 @@ function listProjectsCommand(pushSender) {
 }
 
 function selectProjectCommand(pushSender) {
-    let prompt = {
-        type: 'list',
-        name: 'project',
-        message: 'Select project to send push notification message.',
-    };
-
     pushSender.vorpal
         .command('select project')
         .alias('use project')
         .alias('up')
         .action(function (args, cb) {
-                let projects = repository.getProjects();
-                if (projects.length === 0) {
-                    this.log("No project defined. Please type " + chalk.blue.bold('add project') + " to create one.");
-                    cb(undefined);
-                    return;
+            selectProject(this, projectModel => {
+                if (projectModel !== undefined) {
+                    pushSender.updateProject(projectModel);
                 }
-                prompt.choices = projects.map(project => {
-                    return {'name': project.name, 'value': project}
-                })
-
-                this.prompt(prompt, ({project}) => {
-                    pushSender.updateProject(project);
-                    cb(undefined, project)
-                })
-            }
-        )
+                cb(undefined, projectModel)
+            })
+        });
 }
 
 function removeProjectCommand(pushSender) {
@@ -83,31 +91,41 @@ function removeProjectCommand(pushSender) {
                 cb(undefined, name);
                 return;
             }
-            let prompt = {
-                type: 'list',
-                name: 'project',
-                message: 'Select project to send push notification message.',
-            };
 
-            let projects = repository.getProjects();
-            if (projects.length === 0) {
-                this.log('No projects defined.');
-                cb(undefined);
-                return;
-            }
-            prompt.choices = projects.map(project => {
-                return {'name': project.name, 'value': project}
-            })
-
-            this.prompt(prompt, ({project}) => {
-                repository.removeProjectNamed(project.name);
-                cb(undefined, project)
+            selectProject(this, projectModel => {
+                if (projectModel !== undefined) {
+                    repository.removeProjectNamed(projectModel.name);
+                }
+                cb(undefined, projectModel)
             })
         })
 }
 
+function selectProject(command, callback) {
+    let prompt = {
+        type: 'list',
+        name: 'project',
+        message: 'Select project.',
+    };
+
+    let projects = repository.getProjects();
+    if (projects.length === 0) {
+        command.log("No project defined. Please type " + chalk.blue.bold('add project') + " to create one.");
+        callback(undefined);
+        return;
+    }
+    prompt.choices = projects.map(project => {
+        return {'name': project.name, 'value': project}
+    })
+
+    command.prompt(prompt, ({project}) => {
+        callback(project);
+    })
+}
+
 module.exports = {
     addProjectCommand: addProjectCommand,
+    editProjectCommand: editProjectCommand,
     listProjectsCommand: listProjectsCommand,
     selectProjectCommand: selectProjectCommand,
     removeProjectCommand: removeProjectCommand,

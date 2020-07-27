@@ -34,6 +34,12 @@ class DeviceRepository {
         this.saveDevicesToFile(this.devices);
     }
 
+    updateDevice(oldName, newName, token) {
+        this.removeDeviceNamed(oldName);
+        let deviceModel = new DeviceModel({name: newName, token});
+        this.addDevice(deviceModel);
+    }
+
     getDevices() {
         this.load();
         return this.devices || [];
