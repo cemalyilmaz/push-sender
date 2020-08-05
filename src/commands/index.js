@@ -3,6 +3,7 @@ const device = require('./deviceCommand');
 const template = require('./templatesCommand');
 const message = require('./messageCommand');
 const sendPush = require('./sendPushNotificationCommand');
+const info = require('./helperCommand');
 
 function initCommands(pushSender) {
     let commands = []
@@ -34,6 +35,8 @@ function initCommands(pushSender) {
 
     message.buildMessageCommand(pushSender);
     message.showMessageCommand(pushSender);
+
+    info.whereCommand(pushSender);
 }
 
 module.exports = initCommands

@@ -27,7 +27,7 @@ function messageCommand(pushSender) {
                 let prompt = templates.prompt(files);
 
                 this.prompt(prompt, result => {
-                    let data = fs.readFileSync('./input/' + result.template)
+                    let data = fs.readFileSync('./templates/' + result.template)
                     let template = JSON.parse(data);
 
                     this.prompt(preparePrompt(null, template), function (result) {

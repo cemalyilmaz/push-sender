@@ -11,6 +11,12 @@ function templatesCommand(pushSender) {
             templates
                 .list()
                 .then(files => {
+                    if (files.length === 0) {
+                        this.log("No template found please copy some .json file to " + templates.folder());
+                        cb(undefined);
+                        return;
+                    }
+
                     let prompt = templates.prompt(files);
                     this.prompt(prompt, ({template}) => {
                         pushSender.updateTemplate(template);

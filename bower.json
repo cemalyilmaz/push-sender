@@ -1,0 +1,23 @@
+{
+  "name": "push-sender",
+  "description": "Helper for developers, easily test push notifications.",
+  "main": "./src/index.js",
+  "authors": [
+    "Cemal YILMAZ"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "push",
+    "notification",
+    "vorpal",
+    "android"
+  ],
+  "homepage": "https://github.com/cemalyilmaz/push-sender",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

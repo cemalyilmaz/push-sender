@@ -7,6 +7,7 @@ const DeviceRepository = require('../device/DeviceRepository');
 const deviceRepository = new DeviceRepository({db});
 
 const Templates = require('../templates/templates');
+const rootFolder = require('../settings').rootFolder;
 const {preparePrompt, replaceObject} = require('../prompt/PromptBuilder');
 
 const fs = require('fs');
@@ -88,10 +89,8 @@ function sendMessage(pushSender, type, dry, cb) {
             pushSender.updateTemplate(templateFile);
 
             if (pushSender.message === undefined || type >= 1) {
-                let data = fs.readFileSync('./input/' + templateFile)
-                let templateJSON = JSON.parse(data);
-                console.log('template json' + JSON.stringify(templateJSON));
-                return {templateJSON: templateJSON};
+                let templates = new Templates();
+                return {templateJSON: templates.readTemplateToJson(templateFile)};
             }
 
             return {message: pushSender.message};
@@ -169,12 +168,19 @@ function device() {
 }
 
 function template() {
-    let promise = new Promise((resolve) => {
+    let promise = new Promise((resolve, reject) => {
 
         let templates = new Templates();
-        templates.list()
+        templates
+            .list()
             .then(files => {
+                if (files === undefined || files === null || files.length === 0) {
+                    console.log('Can not find a template');
+                    reject();
+                    return;
+                }
                 let prompt = templates.prompt(files);
+
                 this.prompt(prompt, ({template}) => {
                     resolve(template);
                 });

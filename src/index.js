@@ -1,3 +1,9 @@
+#!/usr/bin/env node
+"use strict";
+
+// todo: create a global folder varialble --> users/cemalyilmaz/push-sender/
+// todo: use this value in db and template paths.
+
 // todo: add update project
 // todo: add update device
 

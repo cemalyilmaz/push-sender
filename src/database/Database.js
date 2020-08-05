@@ -1,8 +1,24 @@
 const fs = require('fs');
+const rootFolder = require('../settings').rootFolder;
+const chalk = require('chalk');
 
 class Database {
     constructor(directory) {
         this.directory = directory;
+        this.assureFolderExists();
+    }
+
+    assureFolderExists() {
+        if (!fs.existsSync(this.directory)) {
+            console.log('Initialized db at ' + chalk.greenBright(this.directory));
+            fs.mkdirSync(this.directory);
+        }
+
+        let templatesFolder = this.directory + '/templates/';
+        if (!fs.existsSync(templatesFolder)) {
+            console.log('Templates folder created at ' + chalk.greenBright(templatesFolder));
+            fs.mkdirSync(templatesFolder);
+        }
     }
 
     saveObject(object, file) {
@@ -42,7 +58,7 @@ class Database {
 
 let databaseInstance;
 
-function initialize(directory = "./data/") {
+function initialize(directory = rootFolder()) {
     if (databaseInstance === undefined) {
         databaseInstance = new Database(directory)
     }

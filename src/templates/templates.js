@@ -1,19 +1,26 @@
 const glob = require('glob');
 const path = require('path');
+const templatesFolder = require('../settings/').templatesFolder;
 
 class Templates {
     constructor(props) {
     }
 
-    list(folder = './input/') {
+    list(folder = templatesFolder()) {
         return new Promise(function (resolve, reject) {
-            glob(folder + "*.json", function (err, files) {
+            glob(folder + "/*.json", function (err, files) {
+
                 if (err) {
                     reject(err);
+                }
+                if (files === undefined || files === null) {
+                    reject();
+                    return;
                 }
                 let names = files.map(file => {
                     return path.basename(file)
                 });
+                console.log('Names:' + names);
                 resolve(names);
             });
         });
@@ -26,6 +33,12 @@ class Templates {
             message: 'Select Template',
             choices: names
         }
+    }
+
+    readTemplateToJson(templateFile) {
+        let data = fs.readFileSync(templatesFolder() + templateFile)
+        let templateJSON = JSON.parse(data);
+        return templateJSON;
     }
 }
 
