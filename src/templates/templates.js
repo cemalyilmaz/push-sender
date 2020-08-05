@@ -1,6 +1,8 @@
 const glob = require('glob');
+const fs = require('fs');
 const path = require('path');
 const templatesFolder = require('../settings/').templatesFolder;
+
 
 class Templates {
     constructor(props) {
